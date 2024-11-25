@@ -20,8 +20,6 @@ impl IntoResponse for ApiHttpResponse {
             ))
             .to_string();
 
-        println!("Status: {:?}", status);
-
         let mut headers = HeaderMap::new();
         headers.insert(header::CONTENT_TYPE, "application/json".parse().unwrap());
         headers.insert(header::ACCEPT, "application/json".parse().unwrap());
