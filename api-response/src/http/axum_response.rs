@@ -5,6 +5,8 @@ use axum::{
 };
 use serde_json::json;
 
+use crate::http::response::{ApiStatusVariant, ErrorResponseCode};
+
 use super::ApiHttpResponse;
 
 impl IntoResponse for ApiHttpResponse {
@@ -12,8 +14,10 @@ impl IntoResponse for ApiHttpResponse {
         let status_code =
             StatusCode::from_u16(self.code).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
 
-        let status = StatusCode::from_u16(self.code)
-            .unwrap_or_default()
+        let status = ApiStatusVariant::try_from(self.code)
+            .unwrap_or(ApiStatusVariant::ResponseError(
+                ErrorResponseCode::InternalServerError,
+            ))
             .to_string();
 
         println!("Status: {:?}", status);
